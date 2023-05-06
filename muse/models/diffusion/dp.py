@@ -291,8 +291,6 @@ class DiffusionPolicyModel(Model):
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
 
-        import pdb;pdb.set_trace()
-
         if timestep is not None:
             """ Single forward / reverse diffusion step (requiring the output) """
             assert raw_action is not None, "raw action required when timestep is passed in!"

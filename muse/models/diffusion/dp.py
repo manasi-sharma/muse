@@ -8,6 +8,8 @@ from muse.utils.general_utils import params_to_object, timeit
 from muse.utils.param_utils import LayerParams
 from muse.utils.torch_utils import combine_then_concatenate
 
+from voltron import instantiate_extractor, load
+
 class DiffusionPolicyModel(Model):
     """
     This model implements Diffusion in the style of DiffusionPolicy.
@@ -67,6 +69,9 @@ class DiffusionPolicyModel(Model):
         if self.num_inference_steps is None:
             self.num_inference_steps = self.noise_scheduler.config.num_train_timesteps
         self.num_inference_steps = self.num_inference_steps
+
+        """Added language conditioning - Manasi"""
+        self.use_language = params['use_language']
 
     def _init_setup(self):
         super()._init_setup()
@@ -290,6 +295,29 @@ class DiffusionPolicyModel(Model):
         shape = (B, T, Da)
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
+
+        """Handling additional language conditioning -Manasi"""
+        instruction = "Push the object into the goal position"
+        lang_model = 'voltron' # options are 'voltron', 'clip', 't5', 'distilbert / roberta' 
+        if self.use_language:
+            if lang_model == 'voltron':
+                vcond, preprocess = load("v-cond", device="cuda", freeze=True)
+                vector_extractor = instantiate_extractor(vcond)()
+                multimodal_embeddings = vcond(instruction, mode="multimodal")
+                representation = vector_extractor(multimodal_embeddings.cpu())
+                lang_repr = representation.unsqueeze(0).repeat(obs.shape[0], 1)
+                import pdb;pdb.set_trace()
+            elif lang_model == 'clip':
+                pass
+            elif lang_model == 't5':
+                pass
+            elif lang_model == 'distilbert':
+                pass
+            else:
+                pass
+
+            global_cond = torch.hstack((global_cond, lang_repr))
+
 
         if timestep is not None:
             """ Single forward / reverse diffusion step (requiring the output) """

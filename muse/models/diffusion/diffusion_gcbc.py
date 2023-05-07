@@ -153,6 +153,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
             n_obs_steps=self.n_obs_steps,
             num_inference_steps=self.num_inference_steps,
             obs_as_global_cond=True,
+            use_language=True, # added language to condition on -Manasi
         )
 
     def init_memory(self, inputs: d, memory: d):

@@ -9,6 +9,7 @@ from muse.utils.param_utils import LayerParams
 from muse.utils.torch_utils import combine_then_concatenate
 
 from voltron import instantiate_extractor, load
+import torch.nn as nn
 
 class DiffusionPolicyModel(Model):
     """
@@ -72,6 +73,12 @@ class DiffusionPolicyModel(Model):
 
         """Added language conditioning - Manasi"""
         self.use_language = params['use_language']
+        """self.lang_encoder_compressor = nn.Sequential(
+            SinusoidalPosEmb(dim),
+            nn.Linear(dim, dim * 4),
+            act_fn,
+            nn.Linear(dim * 4, dim),
+        )"""
 
     def _init_setup(self):
         super()._init_setup()
@@ -298,7 +305,7 @@ class DiffusionPolicyModel(Model):
 
         """Handling additional language conditioning -Manasi"""
         instruction = "Push the object into the goal position"
-        lang_model = 'voltron' # options are 'voltron', 'clip', 't5', 'distilbert / roberta' 
+        lang_model = 'voltron' # options are 'voltron', 'clip', 't5', 'distilbert / roberta'
         if self.use_language:
             if lang_model == 'voltron':
                 vcond, preprocess = load("v-cond", device="cuda", freeze=True)

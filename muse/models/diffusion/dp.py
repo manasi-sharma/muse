@@ -312,8 +312,7 @@ class DiffusionPolicyModel(Model):
                 vector_extractor = instantiate_extractor(vcond)()
                 multimodal_embeddings = vcond(instruction, mode="multimodal")
                 representation = vector_extractor(multimodal_embeddings.cpu())
-                import pdb;pdb.set_trace()
-                lang_repr = representation.unsqueeze(0).repeat(obs.shape[0], 1)
+                lang_repr = representation.repeat(obs.shape[0], 1).to(self.device)
             elif lang_model == 'clip':
                 pass
             elif lang_model == 't5':

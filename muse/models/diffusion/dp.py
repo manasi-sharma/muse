@@ -11,6 +11,8 @@ from muse.utils.torch_utils import combine_then_concatenate
 from voltron import instantiate_extractor, load
 import torch.nn as nn
 
+from einops.layers.torch import Rearrange
+
 class DiffusionPolicyModel(Model):
     """
     This model implements Diffusion in the style of DiffusionPolicy.
@@ -73,12 +75,17 @@ class DiffusionPolicyModel(Model):
 
         """Added language conditioning - Manasi"""
         self.use_language = params['use_language']
-        """self.lang_encoder_compressor = nn.Sequential(
-            SinusoidalPosEmb(dim),
-            nn.Linear(dim, dim * 4),
-            act_fn,
-            nn.Linear(dim * 4, dim),
-        )"""
+        # FiLM modulation https://arxiv.org/abs/1709.07871
+        # predicts per-channel scale and bias
+        global_cond_dim = params['global_cond_dim']
+        self.global_cond_dim = global_cond_dim
+        lang_dim = params["lang_dim"]
+        cond_channels = global_cond_dim * 2
+        self.cond_encoder = nn.Sequential(
+            nn.Mish(),
+            nn.Linear(lang_dim, cond_channels),
+            Rearrange('batch t -> batch t 1'),
+        )
 
     def _init_setup(self):
         super()._init_setup()
@@ -322,7 +329,14 @@ class DiffusionPolicyModel(Model):
             else:
                 pass
 
-            global_cond = torch.hstack((global_cond, lang_repr))
+            #global_cond = torch.hstack((global_cond, lang_repr))
+            embed = self.cond_encoder(lang_repr)
+            embed = embed.reshape(
+                embed.shape[0], 2, self.global_cond_dim, 1)
+            scale = embed[:, 0, ...]
+            bias = embed[:, 1, ...]
+            import pdb;pdb.set_trace()
+            global_cond = scale * global_cond + bias
 
 
         if timestep is not None:

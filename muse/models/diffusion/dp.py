@@ -332,9 +332,9 @@ class DiffusionPolicyModel(Model):
             #global_cond = torch.hstack((global_cond, lang_repr))
             embed = self.cond_encoder(lang_repr)
             embed = embed.reshape(
-                embed.shape[0], 2, self.global_cond_dim, 1)
-            scale = embed[:, 0, ...]
-            bias = embed[:, 1, ...]
+                embed.shape[0], 2, self.global_cond_dim) #, 1)
+            scale = embed[:, 0] #, ...]
+            bias = embed[:, 1] #, ...]
             import pdb;pdb.set_trace()
             global_cond = scale * global_cond + bias
 

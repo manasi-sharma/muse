@@ -54,7 +54,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
             # action size
             input_dim=self.policy_raw_out_size,
             # obs_dim * num_obs_steps
-            global_cond_dim=self.policy_in_size * self.n_obs_steps,
+            global_cond_dim=(self.policy_in_size * self.n_obs_steps)+384,
             diffusion_step_embed_dim=256,
             down_dims=[256, 512, 1024],
             kernel_size=5,

@@ -422,7 +422,7 @@ def to_torch(numpy_in, device="cuda", check=False):
     if check and not isinstance(numpy_in, np.ndarray):
         return numpy_in
     else:
-        return torch.from_numpy(numpy_in).to(device)
+        return torch.from_numpy(numpy_in.copy()).to(device)
 
 
 def to_numpy(torch_in, check=False):

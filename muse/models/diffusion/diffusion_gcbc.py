@@ -141,6 +141,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
         noise_scheduler._is_ode_scheduler = self.use_dpmsolver or self.use_ddim
 
         # override num_inference_steps to reduce the number of inference steps.
+        lang_mode_to_dim = {'voltron': 384, 'clip': 512, 't5': 768, 't5_sentence': 768, 'distilbert': 768, 'distilbert_sentence': 768}
         return base_prms & d(
             cls=DiffusionPolicyModel,
             horizon=self.horizon,
@@ -155,7 +156,8 @@ class DiffusionConvActionDecoder(ActionDecoder):
             obs_as_global_cond=True,
             use_language=True, # added language to condition on -Manasi
             global_cond_dim=self.policy_in_size * self.n_obs_steps,  # added language to condition on -Manasi
-            lang_dim = 384, # added language to condition on -Manasi
+            lang_mode = 'voltron', # added language to condition on -Manasi
+            lang_dim = lang_mode_to_dim['voltron'], # added language to condition on -Manasi
         )
 
     def init_memory(self, inputs: d, memory: d):

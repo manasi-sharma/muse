@@ -154,7 +154,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
             n_obs_steps=self.n_obs_steps,
             num_inference_steps=self.num_inference_steps,
             obs_as_global_cond=True,
-            use_language=True, # added language to condition on -Manasi
+            use_language=False, #True, # added language to condition on -Manasi
             global_cond_dim=self.policy_in_size * self.n_obs_steps,  # added language to condition on -Manasi
             lang_mode = 'voltron', # added language to condition on -Manasi
             lang_dim = lang_mode_to_dim['voltron'], # added language to condition on -Manasi

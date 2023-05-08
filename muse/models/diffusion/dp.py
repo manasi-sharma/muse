@@ -385,9 +385,7 @@ class DiffusionPolicyModel(Model):
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             scale = embed[:, 0] #, ...]
             bias = embed[:, 1] #, ...]
-            import pdb;pdb.set_trace()
             global_cond = scale * global_cond + bias
-            import pdb;pdb.set_trace()
 
 
         if timestep is not None:

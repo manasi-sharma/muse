@@ -100,17 +100,17 @@ class DiffusionPolicyModel(Model):
                 nn.Linear(lang_dim, cond_channels),
                 Rearrange('batch t -> batch t 1'),
             )
-            self.cond_encoder = self.cond_encoder.to("cuda")
+            #self.cond_encoder = self.cond_encoder.to("cuda")
 
             if lang_mode == 'voltron':
                 self.vcond, _ = load("v-cond", device="cuda", freeze=True)
                 self.vector_extractor = instantiate_extractor(self.vcond)()
                 """for param in self.vcond.parameters():
                     param.requires_grad = False"""
-                for param in self.vector_extractor.parameters():
-                   # param.requires_grad = False
-                    param.data = param.to('cuda')
-                    """if param.grad is not None:
+                #for param in self.vector_extractor.parameters():
+                #   param.requires_grad = False
+                #   param.data = param.to('cuda')
+                """ if param.grad is not None:
                         param.grad.data = param.grad.to('cuda')"""
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
@@ -163,8 +163,8 @@ class DiffusionPolicyModel(Model):
             embed = self.cond_encoder(self.lang_repr)
             embed = embed.reshape(
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
-            self.scale = embed[:, 0] #, ...]
-            self.bias = embed[:, 1] #, ...]
+            self.scale = embed[:, 0].detach().cpu() #, ...]
+            self.bias = embed[:, 1].detach().cpu() #, ...]
 
 
     def _init_setup(self):

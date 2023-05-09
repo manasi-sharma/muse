@@ -424,7 +424,8 @@ class DiffusionPolicyModel(Model):
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             scale = embed[:, 0] #, ...]
             bias = embed[:, 1] #, ...]"""
-            global_cond = self.scale * global_cond + self.bias
+            #global_cond = self.scale * global_cond + self.bias
+            pass
 
 
         if timestep is not None:

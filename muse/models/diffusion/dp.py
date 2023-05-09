@@ -105,13 +105,13 @@ class DiffusionPolicyModel(Model):
             if lang_mode == 'voltron':
                 self.vcond, _ = load("v-cond", device="cuda", freeze=True)
                 self.vector_extractor = instantiate_extractor(self.vcond)()
-                for param in self.vcond.parameters():
-                    param.requires_grad = False
+                """for param in self.vcond.parameters():
+                    param.requires_grad = False"""
                 for param in self.vector_extractor.parameters():
-                    param.requires_grad = False
+                   # param.requires_grad = False
                     param.data = param.to('cuda')
-                    if param.grad is not None:
-                        param.grad.data = param.grad.to('cuda')
+                    """if param.grad is not None:
+                        param.grad.data = param.grad.to('cuda')"""
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
                 self.lang_repr = self.vector_extractor(multimodal_embeddings)
@@ -424,9 +424,7 @@ class DiffusionPolicyModel(Model):
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             scale = embed[:, 0] #, ...]
             bias = embed[:, 1] #, ...]"""
-            #global_cond = self.scale * global_cond + self.bias
-            pass
-
+            global_cond = self.scale * global_cond + self.bias
 
         if timestep is not None:
             """ Single forward / reverse diffusion step (requiring the output) """

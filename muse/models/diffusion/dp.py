@@ -109,8 +109,8 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                 for param in self.vector_extractor.parameters():
                    param.requires_grad = False
-                   param.data = param.to('cuda')
-                """ if param.grad is not None:
+                """   param.data = param.to('cuda')
+                    if param.grad is not None:
                         param.grad.data = param.grad.to('cuda')"""
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")

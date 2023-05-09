@@ -100,8 +100,7 @@ class DiffusionPolicyModel(Model):
                 nn.Linear(lang_dim, cond_channels),
                 Rearrange('batch t -> batch t 1'),
             )
-            import pdb;pdb.set_trace()
-            self.cond_encoder = self.cond_encoder.to(device)
+            self.cond_encoder = self.cond_encoder.to("cuda")
 
             if lang_mode == 'voltron':
                 self.vcond, _ = load("v-cond", device="cuda", freeze=True)

@@ -108,8 +108,12 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                 for param in self.vector_extractor.parameters():
                     param.requires_grad = False
+                    param.data = param.to('cuda')
+                    if param.grad is not None:
+                        param.grad.data = param.grad.to('cuda')
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
+                import pdb;pdb.set_trace()
                 self.lang_repr = self.vector_extractor(multimodal_embeddings)
 
             elif lang_mode == 'clip':

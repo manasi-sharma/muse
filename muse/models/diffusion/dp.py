@@ -114,7 +114,6 @@ class DiffusionPolicyModel(Model):
                         param.grad.data = param.grad.to('cuda')"""
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                import pdb;pdb.set_trace()
                 self.lang_repr = self.vector_extractor(multimodal_embeddings.cpu())
 
             elif lang_mode == 'clip':
@@ -425,7 +424,7 @@ class DiffusionPolicyModel(Model):
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             scale = embed[:, 0] #, ...]
             bias = embed[:, 1] #, ...]"""
-            global_cond = self.scale * global_cond + self.bias
+            global_cond = self.scale.to(device) * global_cond + self.bias.to(device)
 
         if timestep is not None:
             """ Single forward / reverse diffusion step (requiring the output) """

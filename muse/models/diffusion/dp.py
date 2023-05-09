@@ -100,6 +100,8 @@ class DiffusionPolicyModel(Model):
                 nn.Linear(lang_dim, cond_channels),
                 Rearrange('batch t -> batch t 1'),
             )
+            import pdb;pdb.set_trace()
+            self.cond_encoder = self.cond_encoder.to(device)
 
             if lang_mode == 'voltron':
                 self.vcond, _ = load("v-cond", device="cuda", freeze=True)
@@ -113,7 +115,6 @@ class DiffusionPolicyModel(Model):
                         param.grad.data = param.grad.to('cuda')
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                import pdb;pdb.set_trace()
                 self.lang_repr = self.vector_extractor(multimodal_embeddings)
 
             elif lang_mode == 'clip':
@@ -160,6 +161,7 @@ class DiffusionPolicyModel(Model):
                 pass
                         
             #self.lang_repr = self.lang_repr.repeat(obs.shape[0], 1).to(device)
+            import pdb;pdb.set_trace()
             embed = self.cond_encoder(self.lang_repr)
             import pdb;pdb.set_trace()
             embed = embed.reshape(

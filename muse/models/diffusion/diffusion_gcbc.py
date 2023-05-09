@@ -156,7 +156,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
             obs_as_global_cond=True,
             use_language=True, #True, # added language to condition on -Manasi
             global_cond_dim=self.policy_in_size * self.n_obs_steps,  # added language to condition on -Manasi
-            lang_mode = 'voltron', # added language to condition on -Manasi
+            lang_mode = 'voltron', # added language to condition on, options are 'voltron', 'clip', 't5', 'distilbert / roberta' -Manasi
             lang_dim = lang_mode_to_dim['voltron'], # added language to condition on -Manasi
         )
 

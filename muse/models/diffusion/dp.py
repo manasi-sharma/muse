@@ -83,11 +83,17 @@ class DiffusionPolicyModel(Model):
         if self.use_language is not None:
             # FiLM modulation https://arxiv.org/abs/1709.07871
             # predicts per-channel scale and bias
+
+            instruction = "Push the object into the goal position"
+
             global_cond_dim = params['global_cond_dim']
             lang_mode = params["lang_mode"]
             lang_dim = params["lang_dim"]
 
             self.global_cond_dim = global_cond_dim
+            self.lang_mode = lang_mode
+            self.lang_dim = lang_dim
+
             cond_channels = global_cond_dim * 2
             self.cond_encoder = nn.Sequential(
                 nn.Mish(),
@@ -102,17 +108,29 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                 for param in self.vector_extractor.parameters():
                     param.requires_grad = False
+
+                multimodal_embeddings = self.vcond(instruction, mode="multimodal")
+                self.lang_repr = self.vector_extractor(multimodal_embeddings)
+
             elif lang_mode == 'clip':
                 device = "cuda" if torch.cuda.is_available() else "cpu"
                 self.clip_model, _ = clip.load("ViT-B/32", device=device)
                 for param in self.clip_model.parameters():
                     param.requires_grad = False
+                    
+                text = clip.tokenize(instruction).to(device)
+                self.lang_repr = self.clip_model.encode_text(text)
+
             elif lang_mode == 't5':
                 pass
             elif lang_mode == 't5_sentence':
                 self.t5_model_sentence = SentenceTransformer('sentence-transformers/sentence-t5-base')
                 for param in self.t5_model_sentence.parameters():
                     param.requires_grad = False
+                    
+                embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
+                self.lang_repr = torch.Tensor(embeddings)
+
             elif lang_mode == 'distilbert':
                 self.distilbert_tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
                 for param in self.distilbert_tokenizer.parameters():
@@ -120,13 +138,31 @@ class DiffusionPolicyModel(Model):
                 self.distilbert = DistilBertModel.from_pretrained('distilbert-base-uncased')
                 for param in self.distilbert.parameters():
                     param.requires_grad = False
+                    
+                inputs = self.distilbert_tokenizer(instruction, return_tensors="pt")
+                outputs = self.distilbert(**inputs)
+                last_hidden_states = outputs.last_hidden_state
+                self.lang_repr = torch.mean(last_hidden_states, dim=1)
+
             elif lang_mode == 'distilbert_sentence':
                 self.distilbert_sentence = SentenceTransformer('sentence-transformers/multi-qa-distilbert-dot-v1')
                 for param in self.distilbert_sentence.parameters():
                     param.requires_grad = False
+                    
+                embeddings = np.expand_dims(self.distilbert_sentence.encode(instruction), 0)
+                self.lang_repr = torch.Tensor(embeddings)
+
             else:
                 pass
-            #model = SentenceTransformer('sentence-transformers/multi-qa-distilbert-dot-v1')
+                        
+            #self.lang_repr = self.lang_repr.repeat(obs.shape[0], 1).to(device)
+            embed = self.cond_encoder(self.lang_repr)
+            import pdb;pdb.set_trace()
+            embed = embed.reshape(
+                embed.shape[0], 2, self.global_cond_dim) #, 1)
+            self.scale = embed[:, 0] #, ...]
+            self.bias = embed[:, 1] #, ...]
+            import pdb;pdb.set_trace()
 
 
     def _init_setup(self):
@@ -353,8 +389,7 @@ class DiffusionPolicyModel(Model):
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
 
         """Handling additional language conditioning -Manasi"""
-        instruction = "Push the object into the goal position"
-        lang_model = 'voltron' # options are 'voltron', 'clip', 't5', 'distilbert / roberta'
+        """instruction = "Push the object into the goal position"
         if self.use_language:
             if lang_model == 'voltron':
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
@@ -377,16 +412,17 @@ class DiffusionPolicyModel(Model):
                 embeddings = np.expand_dims(self.distilbert_sentence.encode(instruction), 0)
                 lang_repr = torch.Tensor(embeddings)
             else:
-                pass
+                pass"""
 
+        if self.use_language:
             #global_cond = torch.hstack((global_cond, lang_repr))
-            lang_repr = lang_repr.repeat(obs.shape[0], 1).to(device)
+            """lang_repr = lang_repr.repeat(obs.shape[0], 1).to(device)
             embed = self.cond_encoder(lang_repr)
             embed = embed.reshape(
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             scale = embed[:, 0] #, ...]
-            bias = embed[:, 1] #, ...]
-            global_cond = scale * global_cond + bias
+            bias = embed[:, 1] #, ...]"""
+            global_cond = self.scale * global_cond + self.bias
 
 
         if timestep is not None:

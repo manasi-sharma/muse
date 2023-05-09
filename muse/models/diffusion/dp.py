@@ -359,6 +359,7 @@ class DiffusionPolicyModel(Model):
             if lang_model == 'voltron':
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
                 lang_repr = self.vector_extractor(multimodal_embeddings)
+                import pdb;pdb.set_trace()
             elif lang_model == 'clip':
                 text = clip.tokenize(instruction).to(device)
                 lang_repr = self.clip_model.encode_text(text)

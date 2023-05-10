@@ -103,7 +103,7 @@ class DiffusionPolicyModel(Model):
             self.cond_encoder = self.cond_encoder.to("cuda")
 
             device = "cuda" if torch.cuda.is_available() else "cpu"
-            
+
             if lang_mode == 'voltron':
                 self.vcond, _ = load("v-cond", device="cuda", freeze=True)
                 self.vector_extractor = instantiate_extractor(self.vcond)()
@@ -134,7 +134,7 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                     
                 embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
-                self.lang_repr = torch.Tensor(embeddings)
+                self.lang_repr = torch.Tensor(embeddings, device=device)
 
             elif lang_mode == 'distilbert':
                 self.distilbert_tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')

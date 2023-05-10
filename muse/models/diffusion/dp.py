@@ -123,6 +123,7 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                     
                 text = clip.tokenize(instruction) #.to(device)
+                import pdb;pdb.set_trace()
                 self.lang_repr = self.clip_model.encode_text(text)
 
             elif lang_mode == 't5':

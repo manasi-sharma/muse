@@ -114,7 +114,7 @@ class DiffusionPolicyModel(Model):
                         param.grad.data = param.grad.to('cuda')
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                self.lang_repr = self.vector_extractor(multimodal_embeddings).detach().cpu()
+                self.lang_repr = self.vector_extractor(multimodal_embeddings)
 
             elif lang_mode == 'clip':
                 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -123,7 +123,7 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                     
                 text = clip.tokenize(instruction).to(device)
-                self.lang_repr = self.clip_model.encode_text(text).detach().cpu()
+                self.lang_repr = self.clip_model.encode_text(text)
 
             elif lang_mode == 't5':
                 pass
@@ -160,7 +160,7 @@ class DiffusionPolicyModel(Model):
                 pass
                         
             #self.lang_repr = self.lang_repr.repeat(obs.shape[0], 1).to(device)
-            embed = self.cond_encoder(self.lang_repr)
+            embed = self.cond_encoder(self.lang_repr).detach().cpu()
             embed = embed.reshape(
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
             self.scale = embed[:, 0].detach().cpu() #, ...]

@@ -128,7 +128,7 @@ class DiffusionPolicyModel(Model):
             elif lang_mode == 't5':
                 pass
             elif lang_mode == 't5_sentence':
-                self.t5_model_sentence = SentenceTransformer('sentence-transformers/sentence-t5-base')
+                self.t5_model_sentence = SentenceTransformer('sentence-transformers/sentence-t5-base', device=device)
                 for param in self.t5_model_sentence.parameters():
                     param.requires_grad = False
                     

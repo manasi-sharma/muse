@@ -160,6 +160,7 @@ class DiffusionPolicyModel(Model):
                 pass
                         
             #self.lang_repr = self.lang_repr.repeat(obs.shape[0], 1).to(device)
+            import pdb;pdb.set_trace()
             embed = self.cond_encoder(self.lang_repr).detach().cpu()
             embed = embed.reshape(
                 embed.shape[0], 2, self.global_cond_dim) #, 1)

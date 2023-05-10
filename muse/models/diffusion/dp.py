@@ -118,11 +118,11 @@ class DiffusionPolicyModel(Model):
 
             elif lang_mode == 'clip':
                 device = "cuda" if torch.cuda.is_available() else "cpu"
-                self.clip_model, _ = clip.load("ViT-B/32", device=device)
+                self.clip_model, _ = clip.load("ViT-B/32") #, device=device)
                 for param in self.clip_model.parameters():
                     param.requires_grad = False
                     
-                text = clip.tokenize(instruction).to(device)
+                text = clip.tokenize(instruction) #.to(device)
                 self.lang_repr = self.clip_model.encode_text(text)
 
             elif lang_mode == 't5':

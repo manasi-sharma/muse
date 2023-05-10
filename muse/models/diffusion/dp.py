@@ -108,23 +108,22 @@ class DiffusionPolicyModel(Model):
                 for param in self.vcond.parameters():
                     param.requires_grad = False
                 for param in self.vector_extractor.parameters():
-                   param.requires_grad = False
-                """   param.data = param.to('cuda')
+                    param.requires_grad = False
+                    param.data = param.to('cuda')
                     if param.grad is not None:
-                        param.grad.data = param.grad.to('cuda')"""
+                        param.grad.data = param.grad.to('cuda')
 
                 multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                self.lang_repr = self.vector_extractor(multimodal_embeddings.cpu())
+                self.lang_repr = self.vector_extractor(multimodal_embeddings).detach().cpu()
 
             elif lang_mode == 'clip':
                 device = "cuda" if torch.cuda.is_available() else "cpu"
-                self.clip_model, _ = clip.load("ViT-B/32") #, device=device)
+                self.clip_model, _ = clip.load("ViT-B/32", device=device)
                 for param in self.clip_model.parameters():
                     param.requires_grad = False
                     
-                text = clip.tokenize(instruction) #.to(device)
-                import pdb;pdb.set_trace()
-                self.lang_repr = self.clip_model.encode_text(text)
+                text = clip.tokenize(instruction).to(device)
+                self.lang_repr = self.clip_model.encode_text(text).detach().cpu()
 
             elif lang_mode == 't5':
                 pass

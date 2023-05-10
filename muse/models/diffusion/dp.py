@@ -123,7 +123,7 @@ class DiffusionPolicyModel(Model):
                     param.requires_grad = False
                     
                 text = clip.tokenize(instruction).to(device)
-                self.lang_repr = self.clip_model.encode_text(text)
+                self.lang_repr = self.clip_model.encode_text(text).float()
 
             elif lang_mode == 't5':
                 pass

@@ -41,7 +41,8 @@ export = d(
         load_episode_range=[0.0, 0.9],
         horizon=F('horizon'),
         batch_size=F('batch_size'),
-        file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
+        #file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
+        file=F('dataset', lambda x: f'tmp_data/push_t/{x}.npz'),
         batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'keypoint'] if kp else ['state', 'action']),
     ),
     dataset_holdout=np_seq.export & d(
@@ -49,7 +50,8 @@ export = d(
         load_episode_range=[0.9, 1.0],
         horizon=F('horizon'),
         batch_size=F('batch_size'),
-        file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
+        #file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
+        file=F('dataset', lambda x: f'tmp_data/push_t/{x}.npz'),
         batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'keypoint'] if kp else ['state', 'action']),
     ),
 

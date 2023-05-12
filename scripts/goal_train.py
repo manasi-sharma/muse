@@ -67,7 +67,7 @@ if __name__ == '__main__':
                                                                        env_spec, file_manager,
                                                                        base_dataset=datasets_train[-1]))
 
-    
+    import pdb;pdb.set_trace()
     # making model, default use the last dataset.
     model = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 

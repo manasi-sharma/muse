@@ -221,6 +221,8 @@ class NpDataset(Dataset):
                 self._merged_onetime_datadict = None
             logger.debug("Datasets have been merged")
 
+            import pdb;pdb.set_trace()
+
     def _init_empty(self, local_dict: d, onetime_dict):
         self._data_len = 0  # number of filled elements
         self._add_index = 0  # add index

@@ -289,6 +289,7 @@ class Dataset(abstract.BaseClass, Sized, TD.IterableDataset):
             dataset = [dataset] + list(extra_datasets)
 
         # creates a new sampler and returns it
+        import pdb;pdb.set_trace()
         return self._default_sampler_cls(dataset, self._default_sampler_prms)
 
     def split_into_inout(self, dc, include_done=True):

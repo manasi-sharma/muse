@@ -274,17 +274,18 @@ class NpDataset(Dataset):
                 # load the dictionary from memory
                 datadict = np.load(path, allow_pickle=True, mmap_mode=self._mmap_mode)  # , mmap_mode="r")
                 datadict = dict(datadict)
-                import pdb;pdb.set_trace()
 
                 if len(self._load_ignore_prefixes) > 0:
                     # keep keys that aren't ignored
                     datadict = d.from_dict(datadict) \
                         .leaf_filter(lambda k, v: not any(k.startswith(pr) for pr in self._load_ignore_prefixes)) \
                         .as_dict()
+                import pdb;pdb.set_trace()
 
                 # this is the number of new elements to add
                 logger.debug("keys: " + str(list(datadict.keys())))
                 new_data_len = len(datadict[self._done_key])
+                import pdb;pdb.set_trace()
 
                 new_data_num_eps = len(np.where(datadict[self._done_key])[0])
                 num_eps += new_data_num_eps

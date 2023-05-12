@@ -274,6 +274,7 @@ class NpDataset(Dataset):
                 # load the dictionary from memory
                 datadict = np.load(path, allow_pickle=True, mmap_mode=self._mmap_mode)  # , mmap_mode="r")
                 datadict = dict(datadict)
+                import pdb;pdb.set_trace()
 
                 if len(self._load_ignore_prefixes) > 0:
                     # keep keys that aren't ignored

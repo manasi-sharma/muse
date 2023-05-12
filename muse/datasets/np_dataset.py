@@ -280,12 +280,10 @@ class NpDataset(Dataset):
                     datadict = d.from_dict(datadict) \
                         .leaf_filter(lambda k, v: not any(k.startswith(pr) for pr in self._load_ignore_prefixes)) \
                         .as_dict()
-                import pdb;pdb.set_trace()
 
                 # this is the number of new elements to add
                 logger.debug("keys: " + str(list(datadict.keys())))
                 new_data_len = len(datadict[self._done_key])
-                import pdb;pdb.set_trace()
 
                 new_data_num_eps = len(np.where(datadict[self._done_key])[0])
                 num_eps += new_data_num_eps
@@ -319,6 +317,7 @@ class NpDataset(Dataset):
 
                 # make sure the dataset ends with a 'done' flag
                 assert datadict[self._done_key][-1], "Dataset %s must end with done == True" % file
+                import pdb;pdb.set_trace()
 
                 if data_len + new_data_len > self._capacity:
                     logger.warn(

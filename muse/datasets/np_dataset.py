@@ -241,7 +241,9 @@ class NpDataset(Dataset):
         if not self._load_from_base:
             local_dict = d()
             onetime_dict = d()
+            import pdb;pdb.set_trace()
             local_dict, onetime_dict, split_indices = self._init_empty(local_dict, onetime_dict)
+            import pdb;pdb.set_trace()
 
             if self._input_files is None:
                 return local_dict, onetime_dict, split_indices
@@ -347,8 +349,6 @@ class NpDataset(Dataset):
                                                      num_eps], f"{name} must be a regular (parsed) step name: {all_vals.shape}"
                         datadict[name] = all_vals
 
-                import pdb;pdb.set_trace()
-
                 # assign each key of step sample keys in our local dictionary based on the np input
                 for key in self._step_names:
                     assert key in datadict, '%s not in np file' % key
@@ -360,8 +360,6 @@ class NpDataset(Dataset):
                         logger.debug([e, key])
                         raise e
                     
-                import pdb;pdb.set_trace()
-
                 # assign each key of one-per-episode keys in our local dictionary based on the np input
                 for key in self._onetime_names:
                     assert key in datadict, '%s not in np file' % key

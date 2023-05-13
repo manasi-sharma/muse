@@ -347,6 +347,8 @@ class NpDataset(Dataset):
                                                      num_eps], f"{name} must be a regular (parsed) step name: {all_vals.shape}"
                         datadict[name] = all_vals
 
+                import pdb;pdb.set_trace()
+
                 # assign each key of step sample keys in our local dictionary based on the np input
                 for key in self._step_names:
                     assert key in datadict, '%s not in np file' % key

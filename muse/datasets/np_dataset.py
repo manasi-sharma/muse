@@ -241,9 +241,7 @@ class NpDataset(Dataset):
         if not self._load_from_base:
             local_dict = d()
             onetime_dict = d()
-            import pdb;pdb.set_trace()
             local_dict, onetime_dict, split_indices = self._init_empty(local_dict, onetime_dict)
-            import pdb;pdb.set_trace()
 
             if self._input_files is None:
                 return local_dict, onetime_dict, split_indices

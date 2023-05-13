@@ -41,6 +41,7 @@ if __name__ == '__main__':
 
     # instantiate classes from the params
     env_spec = params.env_spec.cls(params.env_spec)
+    import pdb;pdb.set_trace()
 
     # instantiate the env
     if local_args.no_env:

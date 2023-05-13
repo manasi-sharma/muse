@@ -357,7 +357,9 @@ class NpDataset(Dataset):
                     except ValueError as e:
                         logger.debug([e, key])
                         raise e
+                    
                 import pdb;pdb.set_trace()
+
                 # assign each key of one-per-episode keys in our local dictionary based on the np input
                 for key in self._onetime_names:
                     assert key in datadict, '%s not in np file' % key

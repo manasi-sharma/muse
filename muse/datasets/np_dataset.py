@@ -317,7 +317,6 @@ class NpDataset(Dataset):
 
                 # make sure the dataset ends with a 'done' flag
                 assert datadict[self._done_key][-1], "Dataset %s must end with done == True" % file
-                import pdb;pdb.set_trace()
 
                 if data_len + new_data_len > self._capacity:
                     logger.warn(
@@ -358,7 +357,7 @@ class NpDataset(Dataset):
                     except ValueError as e:
                         logger.debug([e, key])
                         raise e
-
+                import pdb;pdb.set_trace()
                 # assign each key of one-per-episode keys in our local dictionary based on the np input
                 for key in self._onetime_names:
                     assert key in datadict, '%s not in np file' % key

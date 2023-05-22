@@ -84,7 +84,7 @@ class DiffusionPolicyModel(Model):
             # FiLM modulation https://arxiv.org/abs/1709.07871
             # predicts per-channel scale and bias
 
-            instruction = "Push the object into the goal position"
+            instruction = "Push the object into the goal position" #"Push the block into the goal position" #"Push the object into the goal position"
 
             global_cond_dim = params['global_cond_dim']
             lang_mode = params["lang_mode"]

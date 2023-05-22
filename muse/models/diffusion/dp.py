@@ -133,7 +133,6 @@ class DiffusionPolicyModel(Model):
                 for param in self.t5_model_sentence.parameters():
                     param.requires_grad = False
                     
-                import pdb;pdb.set_trace()
                 embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
                 self.lang_repr = torch.Tensor(embeddings, device=device)
 

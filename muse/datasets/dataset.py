@@ -75,7 +75,6 @@ class Dataset(abstract.BaseClass, Sized, TD.IterableDataset):
         self._use_rollout_steps = get_with_default(params, "use_rollout_steps", True)
 
         self._step_names = get_with_default(params, "step_names", self._env_spec.names)
-        import pdb;pdb.set_trace()
         self._onetime_names = get_with_default(params, "onetime_names",
                                                self._env_spec.param_names + self._env_spec.final_names)
 

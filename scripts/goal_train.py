@@ -41,7 +41,6 @@ if __name__ == '__main__':
 
     # instantiate classes from the params
     env_spec = params.env_spec.cls(params.env_spec)
-    import pdb;pdb.set_trace()
 
     # instantiate the env
     if local_args.no_env:
@@ -68,7 +67,6 @@ if __name__ == '__main__':
                                                                        env_spec, file_manager,
                                                                        base_dataset=datasets_train[-1]))
 
-    import pdb;pdb.set_trace()
     # making model, default use the last dataset.
     model = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 

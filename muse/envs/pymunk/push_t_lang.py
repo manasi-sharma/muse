@@ -455,7 +455,7 @@ class PushTEnv(Env):
                 ('lang_embed', (1, lang_dim,), (np.finfo(np.float32).min, np.finfo(np.float32).max), np.float32),
             ],
             observation_names=['state'] if simple else ['agent/position', 'block/position', 'block/angle'],
-            output_observation_names=['lang_embed'],  # TODO reward?
+            output_observation_names= [], #['lang_embed'],  # TODO reward?
             action_names=['action'],
             goal_names=['keypoint'] if kp else ['goal_pose'],
             param_names=[],

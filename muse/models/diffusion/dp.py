@@ -80,7 +80,7 @@ class DiffusionPolicyModel(Model):
         """Added language conditioning - Manasi"""
         self.use_language = params['use_language']
 
-        if self.use_language is not None:
+        if self.use_language:
             # FiLM modulation https://arxiv.org/abs/1709.07871
             # predicts per-channel scale and bias
 

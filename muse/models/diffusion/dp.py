@@ -165,8 +165,12 @@ class DiffusionPolicyModel(Model):
             embed = self.cond_encoder(self.lang_repr).detach().cpu()
             embed = embed.reshape(
                 embed.shape[0], 2, self.global_cond_dim) #, 1)
-            self.scale = embed[:, 0].detach().cpu() #, ...]
-            self.bias = embed[:, 1].detach().cpu() #, ...]
+            #self.scale = embed[:, 0].detach().cpu() #, ...]
+            #self.bias = embed[:, 1].detach().cpu() #, ...]
+
+            """Random init -Manasi"""
+            self.scale = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)
+            self.bias = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)
 
 
     def _init_setup(self):

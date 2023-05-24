@@ -15,7 +15,7 @@ export = d(
     device="cuda",
     batch_size=256,
     horizon=10,
-    seed=87, #0,
+    seed=0, #0, 42, 87
     dataset='lang_human_pusht_206ep',
     exp_name='push_t/posact{?use_keypoint:-kp}_{?seed:s{seed}_}b{batch_size}_h{horizon}_{dataset}',
     # utils=utils,
@@ -44,6 +44,7 @@ export = d(
         #file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
         file=F('dataset', lambda x: f'tmp_data/push_t/{x}.npz'),
         batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'lang_embed', 'keypoint'] if kp else ['state', 'action', 'lang_embed']),
+        #batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'keypoint'] if kp else ['state', 'action']),
     ),
     dataset_holdout=np_seq.export & d(
         use_rollout_steps=False,
@@ -53,6 +54,7 @@ export = d(
         #file=F('dataset', lambda x: f'data/push_t/{x}.npz'),
         file=F('dataset', lambda x: f'tmp_data/push_t/{x}.npz'),
         batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'lang_embed', 'keypoint'] if kp else ['state', 'action', 'lang_embed']),
+        #batch_names_to_get=F('use_keypoint', lambda kp: ['state', 'action', 'keypoint'] if kp else ['state', 'action']),
     ),
 
     policy=d(

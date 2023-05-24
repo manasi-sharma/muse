@@ -81,6 +81,7 @@ class DiffusionPolicyModel(Model):
         self.use_language = params['use_language']
 
         if self.use_language:
+            print("\n\n\nUSING LANGUAGE!!!\n\n\n")
             # FiLM modulation https://arxiv.org/abs/1709.07871
             # predicts per-channel scale and bias
 

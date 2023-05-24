@@ -11,7 +11,7 @@ export = dc_skip_keys(bc_rnn_lang.export, 'model') & d(
     use_ema=False,
     horizon=16,
     exp_name='push_t/lang_randominit_posact{?use_keypoint:-kp}_{?seed:s{seed}_}b{batch_size}_h{horizon}'
-             '{?use_ema:_ema}_{dataset}{?use_norm:_norm}',
+             '{?use_ema:_ema}_{dataset}{?use_norm:_norm}', #/2_posact
     use_norm=True,
     model=dp_conv_1d.export & d(
         goal_names=[],

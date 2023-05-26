@@ -227,6 +227,8 @@ if __name__ == '__main__':
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))
 
+    tmp = diffusion(obs)
+
     import pdb;pdb.set_trace()
     #action, diff = actor.act(obs, user_action, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))

@@ -227,8 +227,9 @@ if __name__ == '__main__':
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))
 
+    obs['state'] = np.expand_dims(obs['state'], 1)
+    obs['state'] = np.tile(obs['state'], (1, 2, 1))
     import pdb;pdb.set_trace()
-    new_obs = np.tile(np.expand_dims(obs, 1), (1, 2, 1))
     tmp = diffusion(obs)
 
     import pdb;pdb.set_trace()

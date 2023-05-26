@@ -558,8 +558,8 @@ class DiffusionAssistedActor(Actor):
         assert 0 <= fwd_diff_ratio <= 1
         #self._k = int((self.diffusion.num_diffusion_steps - 1) * self.fwd_diff_ratio)
         #print(f'forward diffusion steps for action: {self._k} / {self.diffusion.num_diffusion_steps}')
-        self._k = int((self.diffusion.noise_scheduler.config.num_train_timesteps - 1) * self.fwd_diff_ratio)
-        print(f'forward diffusion steps for action: {self._k} / {self.diffusion.noise_scheduler.config.num_train_timesteps}')
+        self._k = int((self.diffusion.action_decoder.decoder.noise_scheduler.num_train_timesteps - 1) * self.fwd_diff_ratio)
+        print(f'forward diffusion steps for action: {self._k} / {self.diffusion.noise_scheduler.action_decoder.decoder.num_train_timesteps}')
 
     def _diffusion_cond_sample(self, obs, user_act, run_in_batch=False):
         """Conditional sampling"""

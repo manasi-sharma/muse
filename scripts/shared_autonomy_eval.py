@@ -704,19 +704,22 @@ if __name__ == '__main__':
     #inputs, outputs = res[:2]
 
     # Load in latest trained model
-    model = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
+    diffusion = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 
     trained_model_specs = torch.load('experiments/push_t/withoutlang_posact_b256_h16_human_pusht_206ep_norm_diffusion_na8_no2/models/best_model.pt', map_location='cuda')['model']
-    import pdb;pdb.set_trace()
-    model.load_state_dict(trained_model_specs, strict=False)
+    diffusion.load_state_dict(trained_model_specs, strict=False)
 
     # define parameters
     fwd_diff_ratio = 0.45
     actor = DiffusionAssistedActor(diffusion, fwd_diff_ratio)
+
+    # Starting observation
+    obs, goal = env_train.reset()
     
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_dim,))
 
+    import pdb;pdb.set_trace()
     action, diff = actor.act(inputs, user_action, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))
 

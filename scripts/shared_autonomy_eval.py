@@ -711,6 +711,7 @@ if __name__ == '__main__':
 
     # define parameters
     fwd_diff_ratio = 0.45
+    import pdb;pdb.set_trace()
     actor = DiffusionAssistedActor(diffusion, fwd_diff_ratio)
 
     # Starting observation
@@ -719,7 +720,6 @@ if __name__ == '__main__':
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_dim,))
 
-    import pdb;pdb.set_trace()
     action, diff = actor.act(inputs, user_action, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))
 

@@ -127,7 +127,7 @@ class BaseGCBC(GroupedModel, OnlineModel):
             for enc_name in self.state_encoder_order:
                 outputs[enc_name] = self[enc_name](inputs, **self.get_kwargs(enc_name, kwargs))
                 inputs.combine(outputs[enc_name])
-
+        import pdb;pdb.set_trace()
         # get the goal and add it
         if self.use_goal:
             if select_goal:
@@ -137,7 +137,7 @@ class BaseGCBC(GroupedModel, OnlineModel):
             else:
                 assert inputs.has_leaf_keys(self.goal_names), "Missing goal names from input!"
                 outputs.combine(inputs > self.goal_names)
-
+        import pdb;pdb.set_trace()
         with timeit("gcbc/decoder"):
             # run the action decoder (support for nested kwargs)
             outputs['action_decoder'] = self.action_decoder(inputs, **self.get_kwargs('action_decoder', kwargs))

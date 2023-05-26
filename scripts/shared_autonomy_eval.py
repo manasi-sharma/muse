@@ -27,6 +27,8 @@ from configs.helpers import load_base_config, get_script_parser
 from muse.envs.env import Env
 from muse.experiments import logger
 from muse.experiments.file_manager import ExperimentFileManager
+import sys
+
 
 """FROM DIFFUSION MODEL.PY"""
 class DiffusionPolicyModel(Model):

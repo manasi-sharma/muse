@@ -28,14 +28,15 @@ from muse.envs.env import Env
 from muse.experiments import logger
 from muse.experiments.file_manager import ExperimentFileManager
 import sys
+from muse.models.diffusion.dp import DiffusionPolicyModel
 
 
 """FROM DIFFUSION MODEL.PY"""
-class DiffusionPolicyModel(Model):
-    """
-    This model implements Diffusion in the style of DiffusionPolicy.
+"""class DiffusionPolicyModel(Model):
+    #
+    #This model implements Diffusion in the style of DiffusionPolicy.
 
-    """
+    #
 
     predefined_arguments = Model.predefined_arguments + [
         Argument('num_inference_steps', type=int, default=None),
@@ -91,7 +92,7 @@ class DiffusionPolicyModel(Model):
             self.num_inference_steps = self.noise_scheduler.config.num_train_timesteps
         self.num_inference_steps = self.num_inference_steps
 
-        """Added language conditioning - Manasi"""
+        #Added language conditioning - Manasi
         self.use_language = params['use_language']
 
         if self.use_language:
@@ -182,9 +183,9 @@ class DiffusionPolicyModel(Model):
             #self.scale = embed[:, 0].detach().cpu() #, ...]
             #self.bias = embed[:, 1].detach().cpu() #, ...]
 
-            """Random init -Manasi"""
-            """self.scale = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)
-            self.bias = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)"""
+            #Random init -Manasi
+            #self.scale = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)
+            self.bias = torch.FloatTensor(embed.shape[0], self.global_cond_dim).uniform_(-2, 2)
 
 
     def _init_setup(self):
@@ -360,41 +361,39 @@ class DiffusionPolicyModel(Model):
                 forward_pass=None,
                 timestep=None, 
                 raw_action=None, **kwargs):
-        """
-        Normalizes observations, concatenates input names,
+        # Normalizes observations, concatenates input names,
 
-        Runs the conditional sampling procedure if timesteps are not passed in
-            - This means running self.n_inference_steps of reverse diffusion
-            - using conditioning in inputs (e.g. goals)
+        # Runs the conditional sampling procedure if timesteps are not passed in
+        #     - This means running self.n_inference_steps of reverse diffusion
+        #     - using conditioning in inputs (e.g. goals)
 
-        If timestep is not None, will run a single step using timestep
-            - requires action to be passed in as an input.
+        # If timestep is not None, will run a single step using timestep
+        #     - requires action to be passed in as an input.
 
-        Parameters
-        ----------
-        inputs
-        timestep: torch.Tensor (B,)
-            if None, conditional_sampling is run (inference)
-            else, will run a single step, requires raw_action to be passed in
-        raw_action: torch.Tensor (B, H, action_dim), the concatenated true actions (must be same as output space)
-        kwargs
+        # Parameters
+        # ----------
+        # inputs
+        # timestep: torch.Tensor (B,)
+        #     if None, conditional_sampling is run (inference)
+        #     else, will run a single step, requires raw_action to be passed in
+        # raw_action: torch.Tensor (B, H, action_dim), the concatenated true actions (must be same as output space)
+        # kwargs
 
-        Returns
-        -------
-        AttrDict:
-            if timestep is None, d(
-                {raw_out_name}_pred: for all H steps
-                {raw_out_name}: only self.n_action_steps starting from self.n_obs_steps in
-            )
-            else d(
-                noise
-                noisy_trajectory
-                recon_trajectory
-                trajectory
-                condition_mask
-            )
+        # Returns
+        # -------
+        # AttrDict:
+        #     if timestep is None, d(
+        #         {raw_out_name}_pred: for all H steps
+        #         {raw_out_name}: only self.n_action_steps starting from self.n_obs_steps in
+        #     )
+        #     else d(
+        #         noise
+        #         noisy_trajectory
+        #         recon_trajectory
+        #         trajectory
+        #         condition_mask
+        #     )
 
-        """
         # does normalization potentially
         if inputs is not None:
             inputs = self._preamble(inputs)
@@ -423,44 +422,44 @@ class DiffusionPolicyModel(Model):
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
 
-        """Handling additional language conditioning -Manasi"""
-        """instruction = "Push the object into the goal position"
-        if self.use_language:
-            if lang_model == 'voltron':
-                multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                lang_repr = self.vector_extractor(multimodal_embeddings)
-                import pdb;pdb.set_trace()
-            elif lang_model == 'clip':
-                text = clip.tokenize(instruction).to(device)
-                lang_repr = self.clip_model.encode_text(text)
-            elif lang_model == 't5':
-                pass
-            elif lang_model == 't5_sentence':
-                embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
-                lang_repr = torch.Tensor(embeddings)
-            elif lang_model == 'distilbert':
-                inputs = self.distilbert_tokenizer(instruction, return_tensors="pt")
-                outputs = self.distilbert(**inputs)
-                last_hidden_states = outputs.last_hidden_state
-                lang_repr = torch.mean(last_hidden_states, dim=1)
-            elif lang_model == 'distilbert_sentence':
-                embeddings = np.expand_dims(self.distilbert_sentence.encode(instruction), 0)
-                lang_repr = torch.Tensor(embeddings)
-            else:
-                pass"""
+        Handling additional language conditioning -Manasi
+        # instruction = "Push the object into the goal position"
+        # if self.use_language:
+        #     if lang_model == 'voltron':
+        #         multimodal_embeddings = self.vcond(instruction, mode="multimodal")
+        #         lang_repr = self.vector_extractor(multimodal_embeddings)
+        #         import pdb;pdb.set_trace()
+        #     elif lang_model == 'clip':
+        #         text = clip.tokenize(instruction).to(device)
+        #         lang_repr = self.clip_model.encode_text(text)
+        #     elif lang_model == 't5':
+        #         pass
+        #     elif lang_model == 't5_sentence':
+        #         embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
+        #         lang_repr = torch.Tensor(embeddings)
+        #     elif lang_model == 'distilbert':
+        #         inputs = self.distilbert_tokenizer(instruction, return_tensors="pt")
+        #         outputs = self.distilbert(**inputs)
+        #         last_hidden_states = outputs.last_hidden_state
+        #         lang_repr = torch.mean(last_hidden_states, dim=1)
+        #     elif lang_model == 'distilbert_sentence':
+        #         embeddings = np.expand_dims(self.distilbert_sentence.encode(instruction), 0)
+        #         lang_repr = torch.Tensor(embeddings)
+        #     else:
+        #         pass
 
         if self.use_language:
             #global_cond = torch.hstack((global_cond, lang_repr))
-            """lang_repr = lang_repr.repeat(obs.shape[0], 1).to(device)
-            embed = self.cond_encoder(lang_repr)
-            embed = embed.reshape(
-                embed.shape[0], 2, self.global_cond_dim) #, 1)
-            scale = embed[:, 0] #, ...]
-            bias = embed[:, 1] #, ...]"""
+            # lang_repr = lang_repr.repeat(obs.shape[0], 1).to(device)
+            # embed = self.cond_encoder(lang_repr)
+            # embed = embed.reshape(
+            #     embed.shape[0], 2, self.global_cond_dim) #, 1)
+            # scale = embed[:, 0] #, ...]
+            # bias = embed[:, 1] #, ...]
             global_cond = self.scale.to(device) * global_cond + self.bias.to(device)
 
         if forward_pass is not None:
-            """ Single forward / reverse diffusion step (requiring the output) """
+            # Single forward / reverse diffusion step (requiring the output)
             assert raw_action is not None, "raw action required when timestep is passed in!"
             assert raw_action.shape[-1] == self.action_dim, f"Raw action must have |A|={self.action_dim}, " \
                                                             f"but was |A|=({raw_action.shape[-1]}!"
@@ -493,7 +492,7 @@ class DiffusionPolicyModel(Model):
             # zero raw_action during training.
             result[self.raw_out_name] = torch.zeros_like(raw_action)
         else:
-            """ conditional sampling process $(n_diffusion_step) diffusion steps"""
+            # conditional sampling process $(n_diffusion_step) diffusion steps
             assert raw_action is None, "Cannot pass in raw_action during diffusion sampling!"
             # run sampling
             with timeit('diffusion/sampling'):
@@ -521,7 +520,7 @@ class DiffusionPolicyModel(Model):
                 self.raw_out_name: action,
             })
 
-        return result
+        return result"""
 
 
 """ FROM SHARED AUTONOMY.PY"""

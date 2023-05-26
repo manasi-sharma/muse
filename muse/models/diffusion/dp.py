@@ -367,6 +367,8 @@ class DiffusionPolicyModel(Model):
             )
 
         """
+        raise NotImplementedError
+
         # does normalization potentially
         if inputs is not None:
             inputs = self._preamble(inputs)

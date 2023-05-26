@@ -242,6 +242,7 @@ class DiffusionGCBC(BaseGCBC):
             combine_then_concatenate(action_dc, self.action_decoder.action_names, dim=2).to(dtype=torch.float32)
 
         # model forward
+        import pdb;pdb.set_trace()
         model_outputs = self(inputs, **kwargs)
 
         """ 

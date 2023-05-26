@@ -225,7 +225,7 @@ if __name__ == '__main__':
     obs, goal = env_train.reset()
     
     # user_action is read in by user
-    user_action = np.random.random((diffusion.action_dim,))
+    user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))
 
     import pdb;pdb.set_trace()
     #action, diff = actor.act(obs, user_action, report_diff=True)

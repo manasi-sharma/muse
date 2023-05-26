@@ -707,8 +707,8 @@ if __name__ == '__main__':
     model = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 
     trained_model_specs = torch.load('experiments/push_t/withoutlang_posact_b256_h16_human_pusht_206ep_norm_diffusion_na8_no2/models/best_model.pt', map_location='cuda')['model']
-    model.load_state_dict(trained_model_specs)
     import pdb;pdb.set_trace()
+    model.load_state_dict(trained_model_specs, strict=False)
 
     # define parameters
     fwd_diff_ratio = 0.45

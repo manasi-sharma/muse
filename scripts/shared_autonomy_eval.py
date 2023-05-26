@@ -229,6 +229,8 @@ if __name__ == '__main__':
 
     obs['state'] = np.expand_dims(obs['state'], 1)
     obs['state'] = np.tile(obs['state'], (1, 2, 1))
+    obs['state'] = torch.Tensor(obs['state'])
+    obs['state'] = obs['state'].to("cuda")
     import pdb;pdb.set_trace()
     tmp = diffusion(obs)
 

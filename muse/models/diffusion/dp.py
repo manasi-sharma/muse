@@ -367,13 +367,13 @@ class DiffusionPolicyModel(Model):
             )
 
         """
-        import pdb;pdb.set_trace()
 
         # does normalization potentially
         if inputs is not None:
             inputs = self._preamble(inputs)
 
         # concatenate (B x H x ..)
+        import pdb;pdb.set_trace()
         obs = combine_then_concatenate(inputs, self.obs_inputs, dim=2).to(dtype=self.dtype)
 
         # short-hand

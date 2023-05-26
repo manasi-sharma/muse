@@ -367,6 +367,7 @@ class DiffusionPolicyModel(Model):
             )
 
         """
+        import pdb;pdb.set_trace()
 
         # does normalization potentially
         if inputs is not None:
@@ -493,8 +494,6 @@ class DiffusionPolicyModel(Model):
                 f'{self.raw_out_name}_pred': action_pred,
                 self.raw_out_name: action,
             })
-            
-        import pdb;pdb.set_trace()
 
         return result
 

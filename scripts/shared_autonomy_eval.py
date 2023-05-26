@@ -639,6 +639,7 @@ class DiffusionAssistedActor(Actor):
             return action
         
 if __name__ == '__main__':
+    # Create environment
     # read in data and create dataset
     parser = get_script_parser()
     parser.add_argument('config', type=str, help="common params for all modules.")
@@ -698,78 +699,16 @@ if __name__ == '__main__':
                                                                        env_spec, file_manager,
                                                                        base_dataset=datasets_train[-1]))
 
-    import pdb;pdb.set_trace()
-
     # Generate input outputs
     #res = self._datasets_train[dataset_idx].get_batch(indices=indices, torch_device=model.device)
     #inputs, outputs = res[:2]
 
-    # Create environment
-    export = PushTEnv.default_params & d(
-        cls=PushTEnv,
-    )
-    env_spec = GroupField('env_train', export.cls.get_default_env_spec_params)
-    env_train = export.cls(export, env_spec)
-    
-    obs, goal = env_train.reset()
+    # Load in latest trained model
+    model = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 
-    # read in diffusion model (saved weights)
-    export_diff_model = d(
-        exp_name='_diffusion',
-        cls=DiffusionGCBC,
-        use_goal=False,
-        use_last_state_goal=False,
-
-        normalize_states=False,
-        save_action_normalization=False,
-        use_policy_dist=False,
-
-        # names
-        goal_names=['object'],
-        state_names=['robot0_eef_pos', 'robot0_eef_quat', 'robot0_gripper_qpos', 'object'],
-        extra_names=[],
-
-        # encoders
-        state_encoder_order=['proprio_encoder'],
-        proprio_encoder=d(
-            # normalizes and replaces these keys
-            cls=Model,
-            normalize_inputs=F('../normalize_states'),
-            normalization_inputs=F('../state_names'),
-        ),
-
-        model_order=['proprio_encoder', 'action_decoder'],
-        action_decoder=d(
-            exp_name='_na{n_action_steps}_no{n_obs_steps}',
-            cls=DiffusionConvActionDecoder,
-            input_names=F(['../state_names', '../extra_names'], lambda s, e: s + e),
-            action_names=['action'],
-            use_policy_dist=False,
-            use_tanh_out=True,
-            horizon=16,  # make sure this matches with dataset horizon.
-            n_action_steps=8,  # inference run every 8 steps.
-            n_obs_steps=2,
-            decoder=d(
-                generator=d(),  # override here to change generator beyond default
-                noise_scheduler=d()  # override here to change noise scheduler beyond default
-            )
-        ),
-    )
-    model_specs=export_diff_model & d(
-        goal_names=[],
-        norm_overrides=F('use_norm', lambda n: (d(action=d(mean=np.array([512. / 2, 512. / 2]),
-                                                           std=np.array([512. / 2, 512. / 2])))
-                                                if n else d())),
-        normalize_actions=True,
-        save_action_normalization=True,
-        state_names=F('use_keypoint', lambda kp: ['state', 'keypoint'] if kp else ['state']),
-        device=F('device'),
-        action_decoder=d(
-            use_tanh_out=False,
-            horizon=F('horizon'),
-        )
-    )
-
+    trained_model_specs = torch.load('experiments/push_t/withoutlang_posact_b256_h16_human_pusht_206ep_norm_diffusion_na8_no2/models/best_model.pt', map_location='cuda')['model']
+    model.load_state_dict(trained_model_specs)
+    import pdb;pdb.set_trace()
 
     # define parameters
     fwd_diff_ratio = 0.45

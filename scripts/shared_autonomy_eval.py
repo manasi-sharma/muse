@@ -227,6 +227,7 @@ if __name__ == '__main__':
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))
 
+    import pdb;pdb.set_trace()
     tmp = diffusion(obs)
 
     import pdb;pdb.set_trace()

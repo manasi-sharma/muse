@@ -554,7 +554,7 @@ class DiffusionAssistedActor(Actor):
         self.fwd_diff_ratio = fwd_diff_ratio
 
         # self.obs_size = obs_space.low.size
-        self.act_size = diffusion.action_dim #act_space.low.size
+        self.act_size = diffusion.action_decoder.decoder.action_dim #act_space.low.size
 
         assert 0 <= fwd_diff_ratio <= 1
         #self._k = int((self.diffusion.num_diffusion_steps - 1) * self.fwd_diff_ratio)

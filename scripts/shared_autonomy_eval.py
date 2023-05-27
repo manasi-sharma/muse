@@ -224,6 +224,7 @@ if __name__ == '__main__':
 
     # Starting observation
     obs, goal = env_train.reset()
+    #obs = env_train.get_obs()
     
     # user_action is read in by user
     user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))

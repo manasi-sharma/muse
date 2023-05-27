@@ -419,6 +419,7 @@ class DiffusionPolicyModel(Model):
     # ========= training ============
     def _preamble(self, inputs, normalize=True, preproc=True):
         if normalize and self.normalize_inputs:
+            import pdb;pdb.set_trace()
             inputs = self.normalize_by_statistics(inputs, self.normalization_inputs, shared_dtype=self.concat_dtype)
 
         if preproc:

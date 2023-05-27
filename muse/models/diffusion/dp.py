@@ -381,8 +381,7 @@ class DiffusionPolicyModel(Model):
             cond_data, 
             cond_mask,
             local_cond=local_cond,
-            global_cond=global_cond,
-            **self.kwargs)
+            global_cond=global_cond)
         
         # unnormalize prediction
         naction_pred = nsample[...,:Da]

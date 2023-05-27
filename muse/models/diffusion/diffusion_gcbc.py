@@ -244,7 +244,6 @@ class DiffusionGCBC(BaseGCBC):
         # model forward
         #import pdb;pdb.set_trace()
         model_outputs = self(inputs, **kwargs)
-        import pdb;pdb.set_trace()
 
         """ 
         Decoder output should contain...

@@ -235,6 +235,7 @@ if __name__ == '__main__':
     obs['state'] = obs['state'].to("cuda")
 
     tmp1 = diffusion.action_decoder.decoder.predict_action(obs)
+    new_action = tmp1['action'][0] #horizon x dim; #AttrDict(action=tmp1['action'][0])
 
     import pdb;pdb.set_trace()
     tmp = diffusion(obs)

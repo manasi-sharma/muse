@@ -326,7 +326,7 @@ class DiffusionPolicyModel(Model):
         return trajectory
     
 
-    def predict_action(self, obs_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def predict_action(self, obs_dict: AttrDict) -> Dict[str, torch.Tensor]:
         """
         obs_dict: must include "obs" key
         result: must include "action" key
@@ -335,7 +335,7 @@ class DiffusionPolicyModel(Model):
         assert 'state' in obs_dict
 
         #nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
-        nobs = self.normalize_by_statistics(obs_dict['state'], self.normalization_inputs) #, shared_dtype=self.concat_dtype)
+        nobs = self.normalize_by_statistics(obs_dict, 'state')['state'] #self.normalization_inputs) #, shared_dtype=self.concat_dtype)
 
         B, _, Do = nobs.shape
         To = self.n_obs_steps
@@ -386,7 +386,7 @@ class DiffusionPolicyModel(Model):
         naction_pred = nsample[...,:Da]
 
         #action_pred = self.normalizer['action'].unnormalize(naction_pred)
-        action_pred = self.normalize_by_statistics(naction_pred, self.action_decoder.action_names, inverse=True)
+        action_pred = self.normalize_by_statistics(AttrDict(action=naction_pred), 'action', inverse=True)['action'] #self.action_decoder.action_names, inverse=True)
 
         # get action
         if self.pred_action_steps_only:
@@ -406,7 +406,7 @@ class DiffusionPolicyModel(Model):
             nobs_pred = nsample[...,Da:]
 
             #obs_pred = self.normalizer['obs'].unnormalize(nobs_pred)
-            obs_pred = self.normalize_by_statistics(nobs_pred, self.normalization_inputs, inverse=True) #shared_dtype=self.concat_dtype, inverse=True)
+            obs_pred = self.normalize_by_statistics(AttrDict(action=nobs_pred), 'state')['state'] #self.normalization_inputs, inverse=True) #shared_dtype=self.concat_dtype, inverse=True)
             
             action_obs_pred = obs_pred[:,start:end]
             result['action_obs_pred'] = action_obs_pred

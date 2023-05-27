@@ -232,9 +232,9 @@ if __name__ == '__main__':
     #obs['state'] = torch.Tensor(obs['state'])
     #obs['state'] = obs['state'].to("cuda")
 
-    tmp1 = diffusion.action_decoder.decoder.predict_action(obs)
+    #tmp1 = diffusion.action_decoder.decoder.predict_action(obs)
 
-    import pdb;pdb.set_trace()
+    #import pdb;pdb.set_trace()
     tmp = diffusion(obs)
 
     import pdb;pdb.set_trace()

@@ -332,11 +332,10 @@ class DiffusionPolicyModel(Model):
         result: must include "action" key
         """
 
-        assert 'obs' in obs_dict
-        assert 'past_action' not in obs_dict # not implemented yet
+        assert 'state' in obs_dict
 
         #nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
-        nobs = self.normalize_by_statistics(obs_dict['obs'], self.normalization_inputs, shared_dtype=self.concat_dtype)
+        nobs = self.normalize_by_statistics(obs_dict['state'], self.normalization_inputs, shared_dtype=self.concat_dtype)
 
         B, _, Do = nobs.shape
         To = self.n_obs_steps

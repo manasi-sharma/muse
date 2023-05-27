@@ -201,6 +201,7 @@ class Model(torch.nn.Module, BaseClass):
         inputs = inputs.leaf_copy()
 
         for name in found_names:
+            raise NotImplementedError
             import pdb;pdb.set_trace()
             assert name in self.torch_means.keys(), [name, found_names, self.torch_means.keys()]
             # print(name)

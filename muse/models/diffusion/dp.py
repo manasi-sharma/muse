@@ -336,7 +336,7 @@ class DiffusionPolicyModel(Model):
 
         #nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
         import pdb;pdb.set_trace()
-        nobs = self.normalize_by_statistics(obs_dict, 'state')['state'] #self.normalization_inputs) #, shared_dtype=self.concat_dtype)
+        nobs = self.normalize_by_statistics(obs_dict, ['state'])['state'] #self.normalization_inputs) #, shared_dtype=self.concat_dtype)
 
         B, _, Do = nobs.shape
         To = self.n_obs_steps

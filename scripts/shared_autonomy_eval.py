@@ -105,10 +105,10 @@ class DiffusionAssistedActor(Actor):
         # Reverse diffuse Tensor([*crisp_obs, *noisy_user_act]) for (diffusion.num_diffusion_steps - k) steps
         obs = torch.as_tensor(obs, dtype=torch.float32)
         x_k[:, :obs_size] = obs  # Add condition
-        """x_i = x_k
+        x_i = x_k
         for i in reversed(range(self._k)):
             x_i = self.diffusion.p_sample(x_i, i)
-            x_i[:, :obs_size] = obs  # Add condition"""
+            x_i[:, :obs_size] = obs  # Add condition
         
         x_i, _ = self.diffusion.forward(inputs=obs, timestep=torch.as_tensor([self._k]), raw_action=user_act)
 
@@ -225,9 +225,6 @@ if __name__ == '__main__':
     # Starting observation
     obs, goal = env_train.reset()
     #obs = env_train.get_obs()
-    
-    # user_action is read in by user
-    user_action = np.random.random((diffusion.action_decoder.decoder.action_dim,))
 
     obs['state'] = np.expand_dims(obs['state'], 1)
     obs['state'] = np.tile(obs['state'], (1, 2, 1))
@@ -241,7 +238,9 @@ if __name__ == '__main__':
     tmp = diffusion(obs)
 
     import pdb;pdb.set_trace()
-    #action, diff = actor.act(obs, user_action, report_diff=True)
+    # user_action is read in by user
+    user_action = np.random.random(obs['state'].shape)
+    action, diff = actor.act(obs, user_action, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))
 
     # step in the action direction

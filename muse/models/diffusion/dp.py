@@ -335,7 +335,7 @@ class DiffusionPolicyModel(Model):
         assert 'state' in obs_dict
 
         #nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
-        nobs = self.normalize_by_statistics(obs_dict['state'], self.normalization_inputs, shared_dtype=self.concat_dtype)
+        nobs = self.normalize_by_statistics(obs_dict['state'], self.normalization_inputs) #, shared_dtype=self.concat_dtype)
 
         B, _, Do = nobs.shape
         To = self.n_obs_steps
@@ -406,7 +406,7 @@ class DiffusionPolicyModel(Model):
             nobs_pred = nsample[...,Da:]
 
             #obs_pred = self.normalizer['obs'].unnormalize(nobs_pred)
-            obs_pred = self.normalize_by_statistics(nobs_pred, self.normalization_inputs, shared_dtype=self.concat_dtype, inverse=True)
+            obs_pred = self.normalize_by_statistics(nobs_pred, self.normalization_inputs, inverse=True) #shared_dtype=self.concat_dtype, inverse=True)
             
             action_obs_pred = obs_pred[:,start:end]
             result['action_obs_pred'] = action_obs_pred

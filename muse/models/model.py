@@ -196,12 +196,12 @@ class Model(torch.nn.Module, BaseClass):
         else:
             found_names = list(set(self.torch_means.keys()).intersection(names))
 
-        import pdb;pdb.set_trace()
         assert inputs.has_leaf_keys(found_names), list(set(found_names).difference(inputs.list_leaf_keys()))
 
         inputs = inputs.leaf_copy()
 
         for name in found_names:
+            import pdb;pdb.set_trace()
             assert name in self.torch_means.keys(), [name, found_names, self.torch_means.keys()]
             # print(name)
             if shared_dtype is not None:

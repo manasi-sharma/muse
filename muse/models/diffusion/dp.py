@@ -335,7 +335,6 @@ class DiffusionPolicyModel(Model):
         assert 'state' in obs_dict
 
         #nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
-        import pdb;pdb.set_trace()
         nobs = self.normalize_by_statistics(obs_dict, ['state'])['state'] #self.normalization_inputs) #, shared_dtype=self.concat_dtype)
 
         B, _, Do = nobs.shape
@@ -463,7 +462,6 @@ class DiffusionPolicyModel(Model):
         """
 
         # does normalization potentially
-        import pdb;pdb.set_trace()
         if inputs is not None:
             inputs = self._preamble(inputs)
 

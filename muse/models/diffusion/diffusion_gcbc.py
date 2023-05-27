@@ -237,6 +237,7 @@ class DiffusionGCBC(BaseGCBC):
         # do any normalization
         if self.normalize_actions:
             assert self.save_action_normalization, "Model must save action normalization to normalize actions in loss()!"
+            import pdb;pdb.set_trace()
             action_dc = self.normalize_by_statistics(action_dc, self.action_decoder.action_names)
         kwargs['action_decoder_kwargs']['decoder_kwargs']['raw_action'] = \
             combine_then_concatenate(action_dc, self.action_decoder.action_names, dim=2).to(dtype=torch.float32)

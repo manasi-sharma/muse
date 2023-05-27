@@ -29,6 +29,7 @@ from muse.experiments import logger
 from muse.experiments.file_manager import ExperimentFileManager
 import sys
 from muse.models.diffusion.dp import DiffusionPolicyModel
+from muse.models.diffusion.diffusion_gcbc import DiffusionGCBC, DiffusionConvActionDecoder
 
 
 """ FROM SHARED AUTONOMY.PY"""
@@ -54,7 +55,7 @@ class Actor:
 class DiffusionAssistedActor(Actor):
     #def __init__(self, obs_space, act_space, diffusion: DiffusionPolicyModel, #DiffusionModel, 
     #             fwd_diff_ratio: float = 0.45) -> None:
-    def __init__(self, diffusion: DiffusionPolicyModel, #DiffusionModel, 
+    def __init__(self, diffusion: DiffusionGCBC, #DiffusionModel, 
                  fwd_diff_ratio: float = 0.45) -> None:
         #super().__init__(obs_space, act_space)
         self.diffusion = diffusion
@@ -213,6 +214,7 @@ if __name__ == '__main__':
 
     # Load in latest trained model
     diffusion = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
+    import pdb;pdb.set_trace()
 
     trained_model_specs = torch.load('experiments/push_t/withoutlang_posact_b256_h16_human_pusht_206ep_norm_diffusion_na8_no2/models/best_model.pt', map_location='cuda')['model']
     diffusion.load_state_dict(trained_model_specs, strict=False)

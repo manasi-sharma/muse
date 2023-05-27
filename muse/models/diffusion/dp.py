@@ -17,6 +17,8 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from transformers import DistilBertTokenizer, DistilBertModel
 
+from typing import Dict, Callable, List
+
 class DiffusionPolicyModel(Model):
     """
     This model implements Diffusion in the style of DiffusionPolicy.

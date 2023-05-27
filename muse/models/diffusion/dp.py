@@ -462,6 +462,7 @@ class DiffusionPolicyModel(Model):
         """
 
         # does normalization potentially
+        import pdb;pdb.set_trace()
         if inputs is not None:
             inputs = self._preamble(inputs)
 

@@ -214,7 +214,6 @@ if __name__ == '__main__':
 
     # Load in latest trained model
     diffusion = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
-    import pdb;pdb.set_trace()
 
     trained_model_specs = torch.load('experiments/push_t/withoutlang_posact_b256_h16_human_pusht_206ep_norm_diffusion_na8_no2/models/best_model.pt', map_location='cuda')['model']
     diffusion.load_state_dict(trained_model_specs, strict=False)
@@ -234,7 +233,7 @@ if __name__ == '__main__':
     obs['state'] = torch.Tensor(obs['state'])
     obs['state'] = obs['state'].to("cuda")
 
-    #tmp1 = diffusion.action_decoder.decoder.predict_action(obs)
+    tmp1 = diffusion.action_decoder.decoder.predict_action(obs)
 
     #import pdb;pdb.set_trace()
     tmp = diffusion(obs)

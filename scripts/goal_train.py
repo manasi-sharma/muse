@@ -102,6 +102,8 @@ if __name__ == '__main__':
                              file_manager, resume=getattr(local_args, 'continue'))
 
     # trainer
+    import pdb;pdb.set_trace()
+    print(print(model.torch_means.keys()))
     trainer = params.trainer.cls(params.trainer,
                                  file_manager=file_manager,
                                  model=model,

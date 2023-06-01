@@ -467,7 +467,8 @@ class DiffusionPolicyModel(Model):
             )
 
         """
-        import pdb;pdb.set_trace()
+        #import pdb;pdb.set_trace()
+        raise NotImplementedError
 
         # does normalization potentially
         if inputs is not None:
@@ -502,7 +503,6 @@ class DiffusionPolicyModel(Model):
             global_cond = self.scale.to(device) * global_cond + self.bias.to(device)
 
         if timestep is not None:
-            import pdb;pdb.set_trace()
             """ Single forward / reverse diffusion step (requiring the output) """
             assert raw_action is not None, "raw action required when timestep is passed in!"
             assert raw_action.shape[-1] == self.action_dim, f"Raw action must have |A|={self.action_dim}, " \

@@ -98,7 +98,6 @@ class DiffusionAssistedActor(Actor):
         if not run_in_batch:
             #x_k, e = self.diffusion.diffuse(state.unsqueeze(0), torch.as_tensor([self._k]))
             #result = self.diffusion.forward(inputs=obs.unsqueeze(0), timestep=torch.as_tensor([self._k]), raw_action=user_act)
-            import pdb;pdb.set_trace()
             pass
         else:
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))

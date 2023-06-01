@@ -534,7 +534,6 @@ class DiffusionPolicyModel(Model):
             # zero raw_action during training.
             result[self.raw_out_name] = torch.zeros_like(raw_action)
         else:
-            raise NotImplementedError
             """ conditional sampling process $(n_diffusion_step) diffusion steps"""
             assert raw_action is None, "Cannot pass in raw_action during diffusion sampling!"
             # run sampling

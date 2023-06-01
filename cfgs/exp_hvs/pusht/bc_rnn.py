@@ -70,6 +70,6 @@ export = d(
     ),
     # same evaluation scheme as robomimic environments, but less evals cuz its slower
     trainer=rm_goal_trainer.export & d(
-        max_steps=1000, #1000000,
+        max_steps=1000000,
     )
 )

@@ -78,9 +78,9 @@ class DiffusionAssistedActor(Actor):
 
         # HACK
         if not run_in_batch:
-            obs_size = obs.size
+            obs_size = obs['state'].size
         else:
-            obs_size = obs.shape[1]
+            obs_size = obs['state'].shape[1]
 
         # import pdb; pdb.set_trace()
 
@@ -97,7 +97,8 @@ class DiffusionAssistedActor(Actor):
         # Forward diffuse user_act for k steps
         if not run_in_batch:
             #x_k, e = self.diffusion.diffuse(state.unsqueeze(0), torch.as_tensor([self._k]))
-            result = self.diffusion.forward(inputs=obs.unsqueeze(0), timestep=torch.as_tensor([self._k]), raw_action=user_act)
+            #result = self.diffusion.forward(inputs=obs.unsqueeze(0), timestep=torch.as_tensor([self._k]), raw_action=user_act)
+            pass
         else:
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))
             result = self.diffusion.forward(inputs=obs, timestep=torch.as_tensor([self._k]), raw_action=user_act)
@@ -135,7 +136,6 @@ class DiffusionAssistedActor(Actor):
         # print('user act', user_act)
 
         # action = user_act
-        obs = obs_dict['state']
         if self.fwd_diff_ratio != 0:
             action = self._diffusion_cond_sample(obs, user_act, run_in_batch=True)
         else:

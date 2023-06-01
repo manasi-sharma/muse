@@ -121,8 +121,8 @@ class DiffusionAssistedActor(Actor):
             out = x_i
             return out[..., obs_size:].cpu().numpy()
 
-    def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
-    #def act(self, obs_dict: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
+    #def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
+    def act(self, obs_dict: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
         """if isinstance(obs, dict):
             obs_pilot = obs['pilot']
             obs_copilot = obs['copilot']
@@ -135,6 +135,7 @@ class DiffusionAssistedActor(Actor):
         # print('user act', user_act)
 
         # action = user_act
+        obs = obs_dict['state']
         if self.fwd_diff_ratio != 0:
             action = self._diffusion_cond_sample(obs, user_act, run_in_batch=True)
         else:

@@ -190,9 +190,13 @@ class DiffusionPolicyModel(Model):
                            condition_data, condition_mask,
                            local_cond=None, global_cond=None,
                            generator=None,
+                           custom_timesteps=None,
                            ):
         scheduler = self.noise_scheduler
-        scheduler.set_timesteps(self.num_inference_steps)
+        if custom_timesteps is not None:
+            scheduler.set_timesteps(custom_timesteps)
+        else:
+            scheduler.set_timesteps(self.num_inference_steps)
 
         if hasattr(scheduler, '_is_parallel_scheduler') and scheduler.config._is_parallel_scheduler:
             return self.parallel_conditional_sample(condition_data, condition_mask, local_cond, global_cond, generator)
@@ -427,7 +431,7 @@ class DiffusionPolicyModel(Model):
             inputs = self._preproc_fn(inputs)
         return inputs
 
-    def forward(self, inputs: AttrDict, timestep=None, raw_action=None, **kwargs):
+    def forward(self, inputs: AttrDict, timestep=None, raw_action=None, backward_timesteps=None, **kwargs):
         """
         Normalizes observations, concatenates input names,
 
@@ -492,43 +496,13 @@ class DiffusionPolicyModel(Model):
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
 
-        """Handling additional language conditioning -Manasi"""
-        """instruction = "Push the object into the goal position"
-        if self.use_language:
-            if lang_model == 'voltron':
-                multimodal_embeddings = self.vcond(instruction, mode="multimodal")
-                lang_repr = self.vector_extractor(multimodal_embeddings)
-                import pdb;pdb.set_trace()
-            elif lang_model == 'clip':
-                text = clip.tokenize(instruction).to(device)
-                lang_repr = self.clip_model.encode_text(text)
-            elif lang_model == 't5':
-                pass
-            elif lang_model == 't5_sentence':
-                embeddings = np.expand_dims(self.t5_model_sentence.encode(instruction), 0)
-                lang_repr = torch.Tensor(embeddings)
-            elif lang_model == 'distilbert':
-                inputs = self.distilbert_tokenizer(instruction, return_tensors="pt")
-                outputs = self.distilbert(**inputs)
-                last_hidden_states = outputs.last_hidden_state
-                lang_repr = torch.mean(last_hidden_states, dim=1)
-            elif lang_model == 'distilbert_sentence':
-                embeddings = np.expand_dims(self.distilbert_sentence.encode(instruction), 0)
-                lang_repr = torch.Tensor(embeddings)
-            else:
-                pass"""
-
         if self.use_language:
             #global_cond = torch.hstack((global_cond, lang_repr))
-            """lang_repr = lang_repr.repeat(obs.shape[0], 1).to(device)
-            embed = self.cond_encoder(lang_repr)
-            embed = embed.reshape(
-                embed.shape[0], 2, self.global_cond_dim) #, 1)
-            scale = embed[:, 0] #, ...]
-            bias = embed[:, 1] #, ...]"""
             global_cond = self.scale.to(device) * global_cond + self.bias.to(device)
 
         if timestep is not None:
+            raise NotImplementedError
+        
             """ Single forward / reverse diffusion step (requiring the output) """
             assert raw_action is not None, "raw action required when timestep is passed in!"
             assert raw_action.shape[-1] == self.action_dim, f"Raw action must have |A|={self.action_dim}, " \
@@ -570,7 +544,8 @@ class DiffusionPolicyModel(Model):
                     cond_data,
                     cond_mask,
                     local_cond=local_cond,
-                    global_cond=global_cond)
+                    global_cond=global_cond,
+                    custom_timesteps=backward_timesteps)
 
             action_pred = sample[..., :Da]
 

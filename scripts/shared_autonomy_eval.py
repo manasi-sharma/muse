@@ -101,7 +101,7 @@ class DiffusionAssistedActor(Actor):
             pass
         else:
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))
-            result = self.diffusion.forward(inputs=obs, timestep=torch.as_tensor([self._k]), raw_action=user_act) #timestep=torch.as_tensor([self._k]), raw_action=user_act)
+            result = self.diffusion.forward(inputs=obs, timestep=self._k, raw_action=user_act) #timestep=torch.as_tensor([self._k]), raw_action=user_act)
         
         import pdb;pdb.set_trace()
 

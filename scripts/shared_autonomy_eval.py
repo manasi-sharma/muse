@@ -85,12 +85,12 @@ class DiffusionAssistedActor(Actor):
         # import pdb; pdb.set_trace()
 
         # Concat obs and user action
-        if torch.is_tensor(obs):
+        """if torch.is_tensor(obs):
             state = torch.cat((obs, user_act), axis=1)
         else:
             # Luzhe: TEMP!
             # This if else condition is specific for play.py I am not sure whether this would cause a problem for eval
-            state = torch.as_tensor(np.concatenate((obs, user_act), axis=0))
+            state = torch.as_tensor(np.concatenate((obs, user_act), axis=0))"""
 
         # NOTE: Currently only support hard conditioning (replacing a part of the input / output)
 
@@ -101,6 +101,8 @@ class DiffusionAssistedActor(Actor):
         else:
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))
             result = self.diffusion.forward(inputs=obs, timestep=torch.as_tensor([self._k]), raw_action=user_act)
+        
+        import pdb;pdb.set_trace()
 
         # Reverse diffuse Tensor([*crisp_obs, *noisy_user_act]) for (diffusion.num_diffusion_steps - k) steps
         obs = torch.as_tensor(obs, dtype=torch.float32)
@@ -119,8 +121,8 @@ class DiffusionAssistedActor(Actor):
             out = x_i
             return out[..., obs_size:].cpu().numpy()
 
-    #def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
-    def act(self, obs: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
+    def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
+    #def act(self, obs_dict: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
         """if isinstance(obs, dict):
             obs_pilot = obs['pilot']
             obs_copilot = obs['copilot']
@@ -231,14 +233,16 @@ if __name__ == '__main__':
     obs['state'] = torch.Tensor(obs['state'])
     obs['state'] = obs['state'].to("cuda")
 
-    predicted_action = diffusion.action_decoder.decoder.predict_action(obs)
+    #predicted_action = diffusion.action_decoder.decoder.predict_action(obs)
     #predicted_action_dict = AttrDict(action=predicted_action['action'][0]) #horizon x dim; #AttrDict(action=tmp1['action'][0])
 
     #import pdb;pdb.set_trace()
 
     # user_action is read in by user
-    user_action = np.random.random(obs['state'].shape)
+    #user_action = np.random.random(obs['state'].shape)
+    user_action = torch.randn((2,))
     action, diff = actor.act(obs, user_action, report_diff=True)
+    #action, diff = actor.act(obs, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))
 
     # step in the action direction

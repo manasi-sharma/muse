@@ -137,7 +137,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
                 )
 
         # tag with attribute to indicate whether to use parallel sampling
-        noise_scheduler.config._is_parallel_scheduler = self.use_parallel
+        noise_scheduler._is_parallel_scheduler = self.use_parallel
         noise_scheduler._is_ode_scheduler = self.use_dpmsolver or self.use_ddim
 
         # override num_inference_steps to reduce the number of inference steps.

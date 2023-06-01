@@ -500,9 +500,7 @@ class DiffusionPolicyModel(Model):
             #global_cond = torch.hstack((global_cond, lang_repr))
             global_cond = self.scale.to(device) * global_cond + self.bias.to(device)
 
-        if timestep is not None:
-            raise NotImplementedError
-        
+        if timestep is not None:        
             """ Single forward / reverse diffusion step (requiring the output) """
             assert raw_action is not None, "raw action required when timestep is passed in!"
             assert raw_action.shape[-1] == self.action_dim, f"Raw action must have |A|={self.action_dim}, " \
@@ -536,6 +534,7 @@ class DiffusionPolicyModel(Model):
             # zero raw_action during training.
             result[self.raw_out_name] = torch.zeros_like(raw_action)
         else:
+            raise NotImplementedError
             """ conditional sampling process $(n_diffusion_step) diffusion steps"""
             assert raw_action is None, "Cannot pass in raw_action during diffusion sampling!"
             # run sampling

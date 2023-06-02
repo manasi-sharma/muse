@@ -472,7 +472,6 @@ class DiffusionPolicyModel(Model):
             inputs = self._preamble(inputs)
 
         # concatenate (B x H x ..)
-        import pdb;pdb.set_trace()
         obs = combine_then_concatenate(inputs, self.obs_inputs, dim=2).to(dtype=self.dtype)
 
         # short-hand
@@ -513,6 +512,7 @@ class DiffusionPolicyModel(Model):
 
             # 0. Add noise to the clean trajectory according to the noise magnitude at each timestep
             # (this is the forward diffusion process)
+            import pdb;pdb.set_trace()
             noisy_trajectory = self.noise_scheduler.add_noise(
                 trajectory, noise, timestep)
 

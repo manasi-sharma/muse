@@ -512,7 +512,6 @@ class DiffusionPolicyModel(Model):
 
             # 0. Add noise to the clean trajectory according to the noise magnitude at each timestep
             # (this is the forward diffusion process)
-            import pdb;pdb.set_trace()
             noisy_trajectory = self.noise_scheduler.add_noise(
                 trajectory, noise, timestep)
 

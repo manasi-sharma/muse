@@ -231,7 +231,6 @@ class ConditionalUnet1D(nn.Module):
 
         with timeit('cond_unet/up'):
             for idx, (resnet, resnet2, upsample) in enumerate(self.up_modules):
-                import pdb;pdb.set_trace()
                 x = torch.cat((x, h.pop()), dim=1)
                 x = resnet(x, global_feature)
                 if idx == len(self.up_modules) and len(h_local) > 0:

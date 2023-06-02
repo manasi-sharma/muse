@@ -101,13 +101,16 @@ class DiffusionAssistedActor(Actor):
             pass
         else:
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))
-            result = self.diffusion.action_decoder.decoder.forward(inputs=obs, timestep=torch.as_tensor([self._k]).to("cuda"), raw_action=user_act.to("cuda"))
+            forward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, timestep=torch.as_tensor([self._k]).to("cuda"), raw_action=user_act.to("cuda"))
             #result = self.diffusion.forward(inputs=obs, timestep=self._k, raw_action=user_act) #timestep=torch.as_tensor([self._k]), raw_action=user_act)
         
         import pdb;pdb.set_trace()
+        backward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, backward_timesteps=torch.as_tensor([self._k]).to("cuda"), backward_intermed_traj=forward_result.noisy_trajectory)
+        import pdb;pdb.set_trace()
+
 
         # Reverse diffuse Tensor([*crisp_obs, *noisy_user_act]) for (diffusion.num_diffusion_steps - k) steps
-        obs = torch.as_tensor(obs, dtype=torch.float32)
+        """obs = torch.as_tensor(obs, dtype=torch.float32)
         x_k[:, :obs_size] = obs  # Add condition
         x_i = x_k
         for i in reversed(range(self._k)):
@@ -121,7 +124,8 @@ class DiffusionAssistedActor(Actor):
             return out[obs_size:].cpu().numpy()
         else:
             out = x_i
-            return out[..., obs_size:].cpu().numpy()
+            return out[..., obs_size:].cpu().numpy()"""
+        pass
 
     #def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
     def act(self, obs_dict: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):

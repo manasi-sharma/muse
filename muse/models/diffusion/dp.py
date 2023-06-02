@@ -191,27 +191,30 @@ class DiffusionPolicyModel(Model):
                            local_cond=None, global_cond=None,
                            generator=None,
                            custom_timesteps=None,
+                           custom_intermed_traj=None,
                            ):
         scheduler = self.noise_scheduler
         if custom_timesteps is not None:
+            assert custom_intermed_traj is not None
             scheduler.set_timesteps(custom_timesteps)
         else:
             scheduler.set_timesteps(self.num_inference_steps)
 
         if hasattr(scheduler, '_is_parallel_scheduler') and scheduler._is_parallel_scheduler:
             return self.parallel_conditional_sample(condition_data, condition_mask, local_cond, global_cond, generator)
-
-        trajectory = torch.randn(
-            size=condition_data.shape,
-            dtype=condition_data.dtype,
-            device=condition_data.device,
-            generator=generator)
+        
+        if custom_timesteps is not None:
+            trajectory = custom_intermed_traj
+        else:
+            trajectory = torch.randn(
+                size=condition_data.shape,
+                dtype=condition_data.dtype,
+                device=condition_data.device,
+                generator=generator)
 
         for t in scheduler.timesteps:
             # 1. apply conditioning
-            import pdb;pdb.set_trace()
             trajectory[condition_mask] = condition_data[condition_mask]
-            import pdb;pdb.set_trace()
 
             # 2. predict model output
             model_output = self.generator(trajectory, t,
@@ -433,7 +436,7 @@ class DiffusionPolicyModel(Model):
             inputs = self._preproc_fn(inputs)
         return inputs
 
-    def forward(self, inputs: AttrDict, timestep=None, raw_action=None, backward_timesteps=None, **kwargs):
+    def forward(self, inputs: AttrDict, timestep=None, raw_action=None, backward_timesteps=None, backward_intermed_traj=None, **kwargs):
         """
         Normalizes observations, concatenates input names,
 
@@ -539,13 +542,13 @@ class DiffusionPolicyModel(Model):
             assert raw_action is None, "Cannot pass in raw_action during diffusion sampling!"
             # run sampling
             with timeit('diffusion/sampling'):
-                import pdb;pdb.set_trace()
                 sample = self.conditional_sample(
                     cond_data,
                     cond_mask,
                     local_cond=local_cond,
                     global_cond=global_cond,
-                    custom_timesteps=backward_timesteps)
+                    custom_timesteps=backward_timesteps,
+                    custom_intermed_traj=backward_intermed_traj)
 
             action_pred = sample[..., :Da]
 

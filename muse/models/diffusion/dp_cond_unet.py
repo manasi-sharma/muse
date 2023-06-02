@@ -228,6 +228,7 @@ class ConditionalUnet1D(nn.Module):
         with timeit('cond_unet/mid'):
             for mid_module in self.mid_modules:
                 x = mid_module(x, global_feature)
+        import pdb;pdb.set_trace()
 
         with timeit('cond_unet/up'):
             for idx, (resnet, resnet2, upsample) in enumerate(self.up_modules):

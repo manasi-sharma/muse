@@ -209,7 +209,9 @@ class DiffusionPolicyModel(Model):
 
         for t in scheduler.timesteps:
             # 1. apply conditioning
+            import pdb;pdb.set_trace()
             trajectory[condition_mask] = condition_data[condition_mask]
+            import pdb;pdb.set_trace()
 
             # 2. predict model output
             model_output = self.generator(trajectory, t,
@@ -494,6 +496,7 @@ class DiffusionPolicyModel(Model):
         shape = (B, T, Da)
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
+        import pdb;pdb.set_trace()
 
         if self.use_language:
             #global_cond = torch.hstack((global_cond, lang_repr))
@@ -537,6 +540,7 @@ class DiffusionPolicyModel(Model):
             assert raw_action is None, "Cannot pass in raw_action during diffusion sampling!"
             # run sampling
             with timeit('diffusion/sampling'):
+                import pdb;pdb.set_trace()
                 sample = self.conditional_sample(
                     cond_data,
                     cond_mask,

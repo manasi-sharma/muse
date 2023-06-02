@@ -105,7 +105,7 @@ class DiffusionAssistedActor(Actor):
             #result = self.diffusion.forward(inputs=obs, timestep=self._k, raw_action=user_act) #timestep=torch.as_tensor([self._k]), raw_action=user_act)
         
         import pdb;pdb.set_trace()
-        backward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, backward_timesteps=torch.as_tensor([self._k]).to("cuda"), backward_intermed_traj=forward_result.noisy_trajectory)
+        backward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, backward_timesteps=self._k, backward_intermed_traj=forward_result.noisy_trajectory)
         import pdb;pdb.set_trace()
 
 

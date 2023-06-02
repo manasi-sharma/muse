@@ -496,7 +496,6 @@ class DiffusionPolicyModel(Model):
         shape = (B, T, Da)
         cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
         cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
-        import pdb;pdb.set_trace()
 
         if self.use_language:
             #global_cond = torch.hstack((global_cond, lang_repr))

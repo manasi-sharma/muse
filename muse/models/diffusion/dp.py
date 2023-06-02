@@ -520,7 +520,6 @@ class DiffusionPolicyModel(Model):
 
             with timeit('diffusion/single_step'):
                 # 2. compute previous image: x_t -> \hat{x}_t-1
-                import pdb;pdb.set_trace()
                 recon_trajectory = self.generator(noisy_trajectory, timestep,
                                                   local_cond=local_cond, global_cond=global_cond)
 

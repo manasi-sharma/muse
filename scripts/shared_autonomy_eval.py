@@ -242,7 +242,7 @@ if __name__ == '__main__':
 
     # user_action is read in by user
     #user_action = np.random.random(obs['state'].shape)
-    user_action = torch.randn((2,))
+    user_action = torch.randn((1, 2,))
     action, diff = actor.act(obs, user_action, report_diff=True)
     #action, diff = actor.act(obs, report_diff=True)
     #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))

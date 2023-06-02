@@ -472,6 +472,7 @@ class DiffusionPolicyModel(Model):
             inputs = self._preamble(inputs)
 
         # concatenate (B x H x ..)
+        import pdb;pdb.set_trace()
         obs = combine_then_concatenate(inputs, self.obs_inputs, dim=2).to(dtype=self.dtype)
 
         # short-hand

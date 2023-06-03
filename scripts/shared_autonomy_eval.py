@@ -124,7 +124,7 @@ class DiffusionAssistedActor(Actor):
             out = x_i
             return out[..., obs_size:].cpu().numpy()"""
         
-        return backward_result
+        return backward_result['policy_raw']
 
     #def act(self, obs: np.ndarray, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):
     def act(self, obs_dict: AttrDict, user_act: np.ndarray, report_diff: bool = False, return_original: bool = False):

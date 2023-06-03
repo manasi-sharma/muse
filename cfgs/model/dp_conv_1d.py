@@ -36,7 +36,7 @@ export = d(
         use_policy_dist=False,
         use_tanh_out=True,
         horizon=7,  # make sure this matches with dataset horizon. #horizon=16,  # make sure this matches with dataset horizon.
-        n_action_steps=8,  # inference run every 8 steps.
+        n_action_steps=1, #n_action_steps=8,  # inference run every 8 steps.
         n_obs_steps=2,
         decoder=d(
             generator=d(),  # override here to change generator beyond default

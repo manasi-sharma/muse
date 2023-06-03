@@ -58,7 +58,7 @@ class DiffusionConvActionDecoder(ActionDecoder):
             diffusion_step_embed_dim=256,
             down_dims=[256, 512, 1024],
             kernel_size=5,
-            n_groups=8,
+            n_groups=1, #n_groups=8,
             cond_predict_scale=True,
         )
 

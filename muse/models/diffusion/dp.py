@@ -221,6 +221,7 @@ class DiffusionPolicyModel(Model):
                                           local_cond=local_cond, global_cond=global_cond)
 
             # 3. compute previous image: x_t -> x_t-1
+            import pdb;pdb.set_trace()
             trajectory = scheduler.step(
                 model_output, t, trajectory,
                 generator=generator,

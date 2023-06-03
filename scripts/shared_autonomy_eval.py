@@ -103,9 +103,9 @@ class DiffusionAssistedActor(Actor):
             #x_k, e = self.diffusion.diffuse(state, torch.as_tensor([self._k]))
             forward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, timestep=torch.as_tensor([self._k]).to("cuda"), raw_action=user_act.to("cuda"))
             #result = self.diffusion.forward(inputs=obs, timestep=self._k, raw_action=user_act) #timestep=torch.as_tensor([self._k]), raw_action=user_act)
-        
+        import pdb;pdb.set_trace()
         backward_result = self.diffusion.action_decoder.decoder.forward(inputs=obs, backward_timesteps=self._k, backward_intermed_traj=forward_result.noisy_trajectory)
-
+        import pdb;pdb.set_trace()
 
         # Reverse diffuse Tensor([*crisp_obs, *noisy_user_act]) for (diffusion.num_diffusion_steps - k) steps
         """obs = torch.as_tensor(obs, dtype=torch.float32)
@@ -141,6 +141,7 @@ class DiffusionAssistedActor(Actor):
 
         # action = user_act
         if self.fwd_diff_ratio != 0:
+            import pdb;pdb.set_trace()
             action = self._diffusion_cond_sample(obs_dict, user_act, run_in_batch=True)
         else:
             action = user_act

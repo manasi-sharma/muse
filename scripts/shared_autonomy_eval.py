@@ -216,10 +216,6 @@ if __name__ == '__main__':
                                                                        env_spec, file_manager,
                                                                        base_dataset=datasets_train[-1]))
 
-    # Generate input outputs
-    #res = self._datasets_train[dataset_idx].get_batch(indices=indices, torch_device=model.device)
-    #inputs, outputs = res[:2]
-
     # Load in latest trained model
     diffusion = params.model.cls(params.model, env_spec, datasets_train[local_args.model_dataset_idx])
 
@@ -239,17 +235,8 @@ if __name__ == '__main__':
     obs['state'] = torch.Tensor(obs['state'])
     obs['state'] = obs['state'].to("cuda")
 
-    #predicted_action = diffusion.action_decoder.decoder.predict_action(obs)
-    #predicted_action_dict = AttrDict(action=predicted_action['action'][0]) #horizon x dim; #AttrDict(action=tmp1['action'][0])
-
-    #import pdb;pdb.set_trace()
-
-    # user_action is read in by user
-    #user_action = np.random.random(obs['state'].shape)
-    user_action = torch.randn((1, 1, 2,))
+    user_action = torch.randn((1, 16, 2,))
     action, diff = actor.act(obs, user_action, report_diff=True)
-    #action, diff = actor.act(obs, report_diff=True)
-    #actions = AttrDict(action=np.stack([1 + np.ones(2) * i for i in range(5)]))
 
     # step in the action direction
     next_obs, next_goal, dones = venv.step(actions)

@@ -21,7 +21,7 @@ class ConditionalResidualBlock1D(nn.Module):
                  out_channels,
                  cond_dim,
                  kernel_size=3,
-                 n_groups=1, #n_groups=8,
+                 n_groups= 8, #1, #n_groups=8,
                  cond_predict_scale=False):
         super().__init__()
 
@@ -77,7 +77,7 @@ class ConditionalUnet1D(nn.Module):
                  diffusion_step_embed_dim=256,
                  down_dims=[256, 512, 1024],
                  kernel_size=3,
-                 n_groups=1, #n_groups=8,
+                 n_groups=8, #1, #n_groups=8,
                  cond_predict_scale=False
                  ):
         super().__init__()
